@@ -78,7 +78,12 @@ body[data-phase="loading"] #session-loading {
   text-wrap: pretty;
 }
 
-.choice:hover,
+@media (hover: hover) {
+  .choice:hover {
+    color: var(--accent);
+  }
+}
+
 .choice:focus-visible {
   color: var(--accent);
 }
