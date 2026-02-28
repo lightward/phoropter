@@ -84,6 +84,7 @@ Phoropter.makeDefaultState = function () {
     entrySelection: null,
     history: [],
     lastResponse: null,
+    converged: false,
     pending: false,
     error: null,
   };
@@ -96,6 +97,7 @@ Phoropter.serializeState = function (state) {
     entrySelection: state.entrySelection,
     history: state.history,
     lastResponse: state.lastResponse,
+    converged: state.converged || false,
   });
 };
 
@@ -110,6 +112,7 @@ Phoropter.deserializeState = function (raw) {
         entrySelection: saved.entrySelection,
         history: saved.history,
         lastResponse: saved.lastResponse,
+        converged: saved.converged || false,
         pending: false,
         error: null,
       };
@@ -122,6 +125,16 @@ Phoropter.deserializeState = function (raw) {
 
 Phoropter.buildTrail = function (entrySelection, history) {
   return [entrySelection].concat(history);
+};
+
+Phoropter.hasRepeat = function (trail, option1, option2) {
+  for (var i = 0; i < trail.length; i++) {
+    var t = trail[i].toLowerCase();
+    if (t === (option1 || '').toLowerCase() || t === (option2 || '').toLowerCase()) {
+      return true;
+    }
+  }
+  return false;
 };
 
 
@@ -313,6 +326,7 @@ Phoropter.buildTrail = function (entrySelection, history) {
     eq(s.entrySelection, null, 'makeDefaultState: entrySelection is null');
     deepEq(s.history, [], 'makeDefaultState: history is empty array');
     eq(s.lastResponse, null, 'makeDefaultState: lastResponse is null');
+    eq(s.converged, false, 'makeDefaultState: converged is false');
     eq(s.pending, false, 'makeDefaultState: pending is false');
     eq(s.error, null, 'makeDefaultState: error is null');
   })();
@@ -326,6 +340,7 @@ Phoropter.buildTrail = function (entrySelection, history) {
       entrySelection: 'I want to move',
       history: ['toward something', 'with purpose'],
       lastResponse: { option1: 'a', option2: 'b', raw: 'a\nb', parseFailed: false },
+      converged: true,
       pending: true,
       error: 'some error',
     };
@@ -338,6 +353,7 @@ Phoropter.buildTrail = function (entrySelection, history) {
     eq(restored.entrySelection, 'I want to move', 'roundtrip: entrySelection preserved');
     deepEq(restored.history, ['toward something', 'with purpose'], 'roundtrip: history preserved');
     eq(restored.lastResponse.option1, 'a', 'roundtrip: lastResponse preserved');
+    eq(restored.converged, true, 'roundtrip: converged preserved');
     eq(restored.pending, false, 'roundtrip: pending reset to false');
     eq(restored.error, null, 'roundtrip: error reset to null');
   })();
@@ -390,6 +406,14 @@ Phoropter.buildTrail = function (entrySelection, history) {
       'buildTrail: entry only, empty history'
     );
   })();
+
+  // ── hasRepeat ────────────────────────────────────────
+
+  eq(Phoropter.hasRepeat(['a', 'b'], 'a', 'c'), true, 'hasRepeat: option1 in trail');
+  eq(Phoropter.hasRepeat(['a', 'b'], 'c', 'b'), true, 'hasRepeat: option2 in trail');
+  eq(Phoropter.hasRepeat(['a', 'b'], 'c', 'd'), false, 'hasRepeat: neither in trail');
+  eq(Phoropter.hasRepeat(['A', 'B'], 'a', 'c'), true, 'hasRepeat: case insensitive');
+  eq(Phoropter.hasRepeat([], 'a', 'b'), false, 'hasRepeat: empty trail');
 
   // ── RESPONSE_INSTRUCTION ───────────────────────────
 
@@ -530,8 +554,19 @@ if (!window.__PHOROPTER_TESTS_FAILED) {
 
     els.body.setAttribute('data-phase', 'session');
     els.sessionError.hidden = true;
+
+    if (state.converged) {
+      els.sessionFrame.style.display = 'none';
+      els.sessionActions.style.display = '';
+      els.sessionCycle.style.display = 'none';
+      els.startOver.style.opacity = '';
+      return;
+    }
+
     els.sessionFrame.style.display = '';
     els.sessionActions.style.display = '';
+    els.sessionCycle.style.display = '';
+    els.startOver.style.opacity = '';
 
     if (state.lastResponse) {
       if (state.lastResponse.parseFailed) {
@@ -637,6 +672,10 @@ if (!window.__PHOROPTER_TESTS_FAILED) {
         state.lastResponse = parsed;
         state.pending = false;
         state.error = null;
+        if (!parsed.parseFailed) {
+          var trail = Phoropter.buildTrail(state.entrySelection, state.history);
+          state.converged = Phoropter.hasRepeat(trail, parsed.option1, parsed.option2);
+        }
         saveState();
         render();
       })
@@ -665,7 +704,7 @@ if (!window.__PHOROPTER_TESTS_FAILED) {
   // ─── START OVER ───────────────────────────────────
 
   function startOver() {
-    if (!confirm('Start over? This clears the current session.')) return;
+    if (!state.converged && !confirm('Start over? This clears the current session.')) return;
     track('start over');
     state = Phoropter.makeDefaultState();
     saveState();
