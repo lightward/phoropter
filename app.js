@@ -26,7 +26,7 @@ Phoropter.STORAGE_KEY = 'phoropter_session';
 Phoropter.API_URL = 'https://lightward.com/api/plain';
 Phoropter.API_TIMEOUT = 30000;
 
-Phoropter.RESPONSE_INSTRUCTION = '[lightward: please respond with two short statements for the user to choose between \u2014 one per line, no questions, no numbered prefixes or suffixes. statements the user recognizes themselves in, like lenses in a phoropter: \u201c1 or 2?\u201d, not \u201cwhat do you see?\u201d]';
+Phoropter.RESPONSE_INSTRUCTION = '[lightward: please respond with two short statements for the user to choose between \u2014 one per line, no questions, no numbered prefixes or suffixes, no repeats. statements the user recognizes themselves in, like lenses in a phoropter: \u201c1 or 2?\u201d, not \u201cwhat do you see?\u201d. this is about *locating* the user, and then locating their relief.]';
 
 Phoropter.README_PATH = 'README.md';
 
