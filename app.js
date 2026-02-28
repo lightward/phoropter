@@ -602,8 +602,8 @@ if (!window.__PHOROPTER_TESTS_FAILED) {
     if (state.phase === 'entry') {
       els.body.setAttribute('data-phase', 'entry');
       var pair = Phoropter.ENTRY_PAIRS[state.entryIndex];
-      els.entryOption1.textContent = '\u261E ' + pair[0];
-      els.entryOption2.textContent = '\u261E ' + pair[1];
+      els.entryOption1.textContent = '\u261B ' + pair[0];
+      els.entryOption2.textContent = '\u261B ' + pair[1];
       return;
     }
 
@@ -640,8 +640,8 @@ if (!window.__PHOROPTER_TESTS_FAILED) {
         els.sessionOption2.style.display = 'none';
         els.sessionCycle.textContent = '\u2192 try again';
       } else {
-        els.sessionOption1.textContent = '\u261E ' + state.lastResponse.option1;
-        els.sessionOption2.textContent = '\u261E ' + state.lastResponse.option2;
+        els.sessionOption1.textContent = '\u261B ' + state.lastResponse.option1;
+        els.sessionOption2.textContent = '\u261B ' + state.lastResponse.option2;
         els.sessionOption1.style.display = '';
         els.sessionOption2.style.display = '';
         els.sessionCycle.textContent = '\u2192 different question';
@@ -649,9 +649,18 @@ if (!window.__PHOROPTER_TESTS_FAILED) {
     }
   }
 
+  // ─── ANALYTICS ─────────────────────────────────────
+
+  function track(event) {
+    if (typeof fathom !== 'undefined') {
+      fathom.trackEvent(event);
+    }
+  }
+
   // ─── ENTRY ACTIONS ────────────────────────────────
 
   function selectEntry(text) {
+    track('entry select');
     state.phase = 'session';
     state.entrySelection = text;
     state.history = [];
@@ -661,6 +670,7 @@ if (!window.__PHOROPTER_TESTS_FAILED) {
   }
 
   function cycleEntry() {
+    track('entry cycle');
     state.entryIndex = Phoropter.cycleIndex(state.entryIndex, Phoropter.ENTRY_PAIRS.length);
 
     els.entryFrame.classList.add('fading');
@@ -674,6 +684,7 @@ if (!window.__PHOROPTER_TESTS_FAILED) {
 
   function selectOption(n) {
     if (state.pending) return;
+    track('session select');
     var chosen = n === 1 ? state.lastResponse.option1 : state.lastResponse.option2;
     state.history.push(chosen);
     saveState();
@@ -682,6 +693,7 @@ if (!window.__PHOROPTER_TESTS_FAILED) {
 
   function cycleOption() {
     if (state.pending) return;
+    track('session cycle');
     sendToAPI();
   }
 
@@ -749,6 +761,7 @@ if (!window.__PHOROPTER_TESTS_FAILED) {
 
   function startOver() {
     if (!confirm('Start over? This clears the current session.')) return;
+    track('start over');
     state = Phoropter.makeDefaultState();
     saveState();
     render();
