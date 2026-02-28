@@ -34,9 +34,10 @@ main {
 }
 
 #mark {
+  max-width: 32rem;
+  width: 100%;
   font-size: 2rem;
   color: var(--text-dim);
-  text-align: center;
   margin-bottom: 3rem;
   opacity: 0.6;
 }
