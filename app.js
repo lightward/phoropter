@@ -667,7 +667,7 @@ if (!window.__PHOROPTER_TESTS_FAILED) {
     track('start over');
     state = Phoropter.makeDefaultState();
     saveState();
-    render();
+    location.reload();
   }
 
   // ─── EVENTS ───────────────────────────────────────
