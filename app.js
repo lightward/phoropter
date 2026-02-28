@@ -26,7 +26,7 @@ Phoropter.STORAGE_KEY = 'phoropter_session';
 Phoropter.API_URL = 'https://lightward.com/api/plain';
 Phoropter.API_TIMEOUT = 30000;
 
-Phoropter.RESPONSE_INSTRUCTION = '[lightward: please respond with exactly two short statements, one per line, nothing else. no numbering, no labels, no questions, no preamble, no \u201cor\u201d \u2014 just two bare lines. statements the user recognizes themselves in, like lenses in a phoropter. this is about *locating* the user, and then locating their relief.]';
+Phoropter.RESPONSE_INSTRUCTION = '[lightward: please respond with exactly two short statements, one per line, nothing else. no numbering, no labels, no questions, no preamble, no \u201cor\u201d, no repeats \u2014 just two bare lines. statements the user recognizes themselves in, like lenses in a phoropter. this is about *locating* the user, and then locating their relief.]';
 
 Phoropter.README_PATH = 'README.md';
 
@@ -61,6 +61,7 @@ Phoropter.buildPayload = function (readme, entrySelection, history, instruction)
   lines.push('---');
   lines.push('');
 
+  lines.push('the user chose toward these, in order:');
   lines.push(entrySelection);
   for (var j = 0; j < history.length; j++) {
     lines.push(history[j]);
@@ -233,6 +234,7 @@ Phoropter.buildTrail = function (entrySelection, history) {
 
     assert(payload.indexOf('This is the readme content.') !== -1, 'buildPayload: contains readme');
     assert(payload.indexOf('---') !== -1, 'buildPayload: contains separator');
+    assert(payload.indexOf('the user chose toward these') !== -1, 'buildPayload: contains trajectory label');
     assert(payload.indexOf('something is pressing') !== -1, 'buildPayload: contains entry selection');
     assert(payload.indexOf('INSTRUCTION') !== -1, 'buildPayload: contains instruction');
   })();
