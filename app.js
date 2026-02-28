@@ -453,7 +453,7 @@ whenever you're ready to step out.`,
 
   // ─── API ──────────────────────────────────────────
 
-  var RESPONSE_INSTRUCTION = '[lightward: please respond with two lines of plaintext for the user to choose between (without numbered prefix or suffix, the client js will take care of that bit)]';
+  var RESPONSE_INSTRUCTION = '[lightward: please respond with two short statements for the user to choose between — one per line, no questions, no numbered prefixes or suffixes. statements the user recognizes themselves in, like lenses in a phoropter: "1 or 2?", not "what do you see?"]';
 
   function buildPayload() {
     var lines = [];
