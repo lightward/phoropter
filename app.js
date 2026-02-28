@@ -617,9 +617,16 @@ if (!window.__PHOROPTER_TESTS_FAILED) {
     }
 
     if (state.pending) {
+      // Lock the height of the interactive area to prevent layout jump
+      var frameH = els.sessionFrame.offsetHeight || 0;
+      var actionsH = els.sessionActions.offsetHeight || 0;
+      els.sessionLoading.style.minHeight = (frameH + actionsH) + 'px';
       els.body.setAttribute('data-phase', 'loading');
       return;
     }
+
+    // Release locked height
+    els.sessionLoading.style.minHeight = '';
 
     if (state.error) {
       els.body.setAttribute('data-phase', 'session');
