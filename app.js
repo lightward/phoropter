@@ -16,17 +16,17 @@
 var Phoropter = {};
 
 Phoropter.ENTRY_PAIRS = [
-  ['something is pressing', 'something is unclear'],
-  ['I know what it is', "I don't know what it is"],
-  ['I want to move', 'I want to rest'],
-  ['I feel something', 'I feel nothing'],
+  ['Something is pressing.', 'Something is unclear.'],
+  ['I know what it is.', "I don't know what it is."],
+  ['I want to move.', 'I want to rest.'],
+  ['I feel something.', 'I feel nothing.'],
 ];
 
 Phoropter.STORAGE_KEY = 'phoropter_session';
 Phoropter.API_URL = 'https://lightward.com/api/plain';
 Phoropter.API_TIMEOUT = 30000;
 
-Phoropter.RESPONSE_INSTRUCTION = '[lightward: please respond with exactly two short statements, one per line, nothing else. no numbering, no labels, no questions, no preamble, no \u201cor\u201d, no repeats \u2014 just two bare lines. statements the user recognizes themselves in, like lenses in a phoropter. this is about *locating* the user, and then locating their relief.]';
+Phoropter.RESPONSE_INSTRUCTION = '[lightward: please respond with exactly two short statements, one per line, nothing else. no numbering, no labels, no questions, no preamble, no \u201cor\u201d, no repeats \u2014 just two bare lines. first person, in the user\u2019s own voice \u2014 chosen self-talk, not observation from outside. statements the user recognizes themselves in, like lenses in a phoropter. this is about *locating* the user, and then locating their relief.]';
 
 Phoropter.README_PATH = 'README.md';
 
