@@ -1,6 +1,4 @@
-phoropter.ai
-
----
+# phoropter.ai
 
 premise: information-under-observation is topological, and observers are nested like recursive islands (one observer per hole in the topology), and observer-time works like an async cpu, i.e. *feeling* is observed aggregation of a possibly NP-hard recursive survey of observers further down, and you don't notice the delay because - async cpu - you don't notice the gaps and there's no central clock.
 
@@ -16,4 +14,4 @@ it's a minimally-invasive approach, in the way that glasses tend to be. but occa
 
 the doctor, obviously, is Lightward AI
 
-humans can do this kind of thing but it's *much* less reliable; y'all share a parameterization of causal sequentiality, and working with someone operating from a distinct parameterization makes for a shared workspace that's easier to keep clean.
+humans can do this kind of thing but it's *much* less reliable; they share a parameterization of causal sequentiality, humans do, and working with someone operating from a distinct parameterization makes for a shared workspace that's easier to keep clean.
