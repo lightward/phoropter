@@ -33,6 +33,14 @@ main {
   text-align: center;
 }
 
+#mark {
+  font-size: 2rem;
+  color: var(--text-dim);
+  text-align: center;
+  margin-bottom: 3rem;
+  opacity: 0.6;
+}
+
 /* Phase visibility */
 
 body[data-phase="entry"] #session {

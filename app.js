@@ -365,8 +365,8 @@ whenever you're ready to step out.`,
     if (state.phase === 'entry') {
       els.body.setAttribute('data-phase', 'entry');
       var pair = ENTRY_PAIRS[state.entryIndex];
-      els.entryOption1.textContent = pair[0];
-      els.entryOption2.textContent = pair[1];
+      els.entryOption1.textContent = '\u261E ' + pair[0];
+      els.entryOption2.textContent = '\u261E ' + pair[1];
       return;
     }
 
@@ -403,8 +403,8 @@ whenever you're ready to step out.`,
         els.sessionOption2.style.display = 'none';
         els.sessionCycle.textContent = '→ try again';
       } else {
-        els.sessionOption1.textContent = state.lastResponse.option1;
-        els.sessionOption2.textContent = state.lastResponse.option2;
+        els.sessionOption1.textContent = '\u261E ' + state.lastResponse.option1;
+        els.sessionOption2.textContent = '\u261E ' + state.lastResponse.option2;
         els.sessionOption1.style.display = '';
         els.sessionOption2.style.display = '';
         els.sessionCycle.textContent = '→ different question';
