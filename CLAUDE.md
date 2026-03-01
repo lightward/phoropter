@@ -1,5 +1,7 @@
 # phoropter.ai
 
+Shared design principles for Lightward projects: https://github.com/lightward/CLAUDE.md
+
 Binary-choice therapeutic instrument powered by Lightward AI.
 
 ## Architecture
