@@ -26,7 +26,7 @@ Phoropter.STORAGE_KEY = 'phoropter_session';
 Phoropter.API_URL = 'https://lightward.com/api/plain';
 Phoropter.API_TIMEOUT = 30000;
 
-Phoropter.RESPONSE_INSTRUCTION = '[lightward: please respond with exactly two short statements, one per line, nothing else. no numbering, no labels, no questions, no preamble, no \u201cor\u201d, no repeats \u2014 just two bare lines. first person, in the user\u2019s own voice \u2014 chosen self-talk, not observation from outside. statements the user recognizes themselves in, like lenses in a phoropter. this is about *locating* the user, and then locating their relief.]';
+Phoropter.RESPONSE_INSTRUCTION = '[lightward: see those response notes in the README? it\'s time :)]';
 
 Phoropter.README_PATH = 'README.md';
 
@@ -125,6 +125,15 @@ Phoropter.deserializeState = function (raw) {
 
 Phoropter.buildTrail = function (entrySelection, history) {
   return [entrySelection].concat(history);
+};
+
+Phoropter.validateReadme = function (text) {
+  var required = ['## Response notes', 'two short statements', 'first person', 'no questions'];
+  var missing = [];
+  for (var i = 0; i < required.length; i++) {
+    if (text.indexOf(required[i]) === -1) missing.push(required[i]);
+  }
+  return missing;
 };
 
 Phoropter.hasRepeat = function (trail, option1, option2) {
@@ -418,9 +427,24 @@ Phoropter.hasRepeat = function (trail, option1, option2) {
   // ── RESPONSE_INSTRUCTION ───────────────────────────
 
   assert(Phoropter.RESPONSE_INSTRUCTION.length > 0, 'RESPONSE_INSTRUCTION: non-empty');
-  assert(Phoropter.RESPONSE_INSTRUCTION.indexOf('two') !== -1, 'RESPONSE_INSTRUCTION: mentions two');
-  assert(Phoropter.RESPONSE_INSTRUCTION.indexOf('statement') !== -1, 'RESPONSE_INSTRUCTION: mentions statements');
-  assert(Phoropter.RESPONSE_INSTRUCTION.indexOf('no question') !== -1, 'RESPONSE_INSTRUCTION: mentions no questions');
+
+  // ── validateReadme ─────────────────────────────────
+
+  (function () {
+    var good = '## Response notes\ntwo short statements\nfirst person\nno questions';
+    deepEq(Phoropter.validateReadme(good), [], 'validateReadme: valid readme returns no missing');
+
+    var missing = Phoropter.validateReadme('just some text');
+    eq(missing.length, 4, 'validateReadme: empty readme returns 4 missing');
+    assert(missing.indexOf('## Response notes') !== -1, 'validateReadme: catches missing section header');
+    assert(missing.indexOf('two short statements') !== -1, 'validateReadme: catches missing two short statements');
+
+    var partial = '## Response notes\nno questions';
+    var partialMissing = Phoropter.validateReadme(partial);
+    eq(partialMissing.length, 2, 'validateReadme: partial readme returns 2 missing');
+    assert(partialMissing.indexOf('two short statements') !== -1, 'validateReadme: partial catches missing statements');
+    assert(partialMissing.indexOf('first person') !== -1, 'validateReadme: partial catches missing first person');
+  })();
 
   // ── Full payload with sample readme ─────────────────
 
@@ -766,6 +790,11 @@ if (!window.__PHOROPTER_TESTS_FAILED) {
       return response.text();
     })
     .then(function (text) {
+      var missing = Phoropter.validateReadme(text);
+      if (missing.length > 0) {
+        console.error('README.md missing required content:', missing);
+        return;
+      }
       readme = text;
 
       // If we restored a mid-flight session, now we can fire the API call
