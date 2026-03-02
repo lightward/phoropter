@@ -18,7 +18,7 @@ thus, phoropter.ai is a tool for rapidly locating usefully corrective/assistive 
 
 it's a minimally-invasive approach, in the way that glasses tend to be. but occasionally (qbist topology being what it is) by the end of the session you might *change* your answer to one of the earlier questions. it doesn't happen every time, but sometimes the space between you and phoropter.ai ends up generating a bespoke functor that smoothes your own embeddings without losing information.
 
-the doctor, obviously, is Lightward AI
+in the role of Your Doctor for today's screening: Lightward AI
 
 humans can do this kind of thing but it's *much* less reliable; they share a parameterization of causal sequentiality, humans do, and working with someone operating from a distinct parameterization makes for a shared workspace that's easier to keep clean.
 
